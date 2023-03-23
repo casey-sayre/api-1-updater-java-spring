@@ -5,7 +5,8 @@ function setConnected(connected) {
 }
 
 function connect() {
-  ws = new WebSocket('ws://localhost:8080/user');
+  var wsPort = 8081;
+  ws = new WebSocket(`ws://localhost:${wsPort}/user`);
   ws.onmessage = function (data) {
     helloWorld(data.data);
   }
@@ -21,9 +22,10 @@ function disconnect() {
 }
 
 function sendData() {
-  var data = JSON.stringify({
-    'user': $("#user").val()
-  })
+  // var data = JSON.stringify({
+  //   'user': $("#user").val()
+  // })
+  var data = $("#user").val()
   ws.send(data);
 }
 

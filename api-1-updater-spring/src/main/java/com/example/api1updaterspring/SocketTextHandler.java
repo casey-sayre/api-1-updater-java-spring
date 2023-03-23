@@ -12,7 +12,6 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-
 @Component
 public class SocketTextHandler extends TextWebSocketHandler {
 
@@ -36,8 +35,14 @@ public class SocketTextHandler extends TextWebSocketHandler {
 
     String payload = message.getPayload();
     System.out.println(String.format("handleTextMessage() received payload '%s'", payload));
-    JSONObject jsonObject = new JSONObject(payload);
-    session.sendMessage(new TextMessage("Hi " + jsonObject.get("user") + " how may we help you?"));
+    // JSONObject jsonObject = new JSONObject(payload);
+    // session.sendMessage(new TextMessage("Hi " + jsonObject.get("user") + " how
+    // may we help you?"));
+
+    // broadcast
+    for (WebSocketSession webSocketSession : sessions) {
+      webSocketSession.sendMessage(new TextMessage(payload));
+    }
   }
 
 }
