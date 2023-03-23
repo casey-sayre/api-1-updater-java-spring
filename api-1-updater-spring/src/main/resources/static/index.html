@@ -28,7 +28,10 @@
         <table id="chat">
           <thead>
             <tr>
-              <th>Welcome user. Please enter you name</th>
+              <th>Welcome. Please enter album update as JSON string</th>
+            </tr>
+            <tr>
+              <th>For example: {"id":1, "artist":"The Beatles", "title":"The Beatles", "price":24.95}</th>
             </tr>
           </thead>
           <tbody id="helloworldmessage">
@@ -40,7 +43,7 @@
         <div class="col-md-6">
           <form class="form-inline">
             <div class="form-group">
-              <textarea id="user" placeholder="Write your message here..." required></textarea>
+              <textarea id="user" placeholder="Put your JSON string here..." required></textarea>
             </div>
             <button id="send" type="submit">Send</button>
           </form>

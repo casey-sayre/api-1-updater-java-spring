@@ -6,7 +6,8 @@ function setConnected(connected) {
 
 function connect() {
   var wsPort = 8081;
-  ws = new WebSocket(`ws://localhost:${wsPort}/user`);
+  const wsPath = "/album-updates";
+  ws = new WebSocket(`ws://localhost:${wsPort}${wsPath}`);
   ws.onmessage = function (data) {
     helloWorld(data.data);
   }
