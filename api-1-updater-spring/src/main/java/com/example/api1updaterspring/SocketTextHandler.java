@@ -2,11 +2,11 @@ package com.example.api1updaterspring;
 
 import java.io.IOException;
 
-import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
+import org.springframework.web.socket.handler.ConcurrentWebSocketSessionDecorator;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.util.List;
@@ -20,13 +20,16 @@ public class SocketTextHandler extends TextWebSocketHandler {
   @Override
   public void afterConnectionEstablished(WebSocketSession session) throws java.lang.Exception {
     System.out.println("afterConnectionEstablished");
-    sessions.add(session);
+    ConcurrentWebSocketSessionDecorator currentWebSocketSessionDecorator = new ConcurrentWebSocketSessionDecorator (session, 1000, 1024);
+    // sessions.add(session);
+    sessions.add(currentWebSocketSessionDecorator);
   }
 
   @Override
   public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws java.lang.Exception {
     System.out.println("afterConnectionClosed");
     sessions.remove(session);
+    session.close();
   }
 
   @Override
@@ -36,9 +39,14 @@ public class SocketTextHandler extends TextWebSocketHandler {
     String payload = message.getPayload();
     System.out.println(String.format("handleTextMessage() received payload '%s'", payload));
 
-    // broadcast
+    broadcastJsonString(payload);
+  }
+
+  public void broadcastJsonString(String jsonString)
+      throws InterruptedException, IOException {
+    System.out.println(String.format("broadcastJsonString: '%s'", jsonString));
     for (WebSocketSession webSocketSession : sessions) {
-      webSocketSession.sendMessage(new TextMessage(payload));
+      webSocketSession.sendMessage(new TextMessage(jsonString));
     }
   }
 
