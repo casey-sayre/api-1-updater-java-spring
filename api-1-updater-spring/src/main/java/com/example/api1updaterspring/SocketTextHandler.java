@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
-import org.springframework.web.socket.handler.ConcurrentWebSocketSessionDecorator;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.util.List;
@@ -15,14 +14,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Component
 public class SocketTextHandler extends TextWebSocketHandler {
 
-  List<WebSocketSession> sessions = new CopyOnWriteArrayList<WebSocketSession>();
+  private static List<WebSocketSession> sessions = new CopyOnWriteArrayList<WebSocketSession>();
 
   @Override
   public void afterConnectionEstablished(WebSocketSession session) throws java.lang.Exception {
     System.out.println("afterConnectionEstablished");
-    ConcurrentWebSocketSessionDecorator currentWebSocketSessionDecorator = new ConcurrentWebSocketSessionDecorator (session, 1000, 1024);
-    // sessions.add(session);
-    sessions.add(currentWebSocketSessionDecorator);
+    sessions.add(session);
   }
 
   @Override
